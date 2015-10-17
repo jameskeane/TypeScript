@@ -7860,8 +7860,8 @@ namespace ts {
                 error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
-            if (jsxImplementorType === undefined) {
-                error(errorNode, Diagnostics.JSX_requires_an_Implementor_when_translating);
+            if ((compilerOptions.jsx === JsxEmit.Generic) && jsxImplementorType === undefined) {
+                error(errorNode, Diagnostics.JSX_requires_an_Implementor_when_desugaring);
             }
 
             if (jsxElementType === undefined) {
