@@ -880,6 +880,7 @@ namespace ts {
         _openingElementBrand?: any;
         tagName: EntityName;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
+        implementor: string;
     }
 
     /// A JSX expression of the form <TagName attrs />
@@ -2109,7 +2110,7 @@ namespace ts {
     export const enum JsxEmit {
         None = 0,
         Preserve = 1,
-        React = 2
+        Generic = 2
     }
 
     export const enum NewLineKind {

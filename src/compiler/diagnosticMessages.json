@@ -1720,6 +1720,10 @@
         "category": "Error",
         "code": 2656
     },
+    "JSX requires an 'Implementor' when translating": {
+        "category": "Error",
+        "code": 2657
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2258,11 +2262,11 @@
         "code": 6063
     },
 
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve' or 'generic'": {
         "category": "Message",
         "code": 6080
     },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
+    "Argument for '--jsx' must be 'preserve' or 'generic'.": {
         "category": "Message",
         "code": 6081
     },

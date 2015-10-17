@@ -1404,7 +1404,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(span.literal);
             }
 
-            function jsxEmitReact(node: JsxElement|JsxSelfClosingElement) {
+            function jsxEmitGeneric(node: JsxElement|JsxSelfClosingElement) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier|QualifiedName) {
@@ -1446,7 +1446,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     let syntheticReactRef = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                    syntheticReactRef.text = "React";
+                    syntheticReactRef.text = openingNode.implementor || 'JSX';
                     syntheticReactRef.parent = openingNode;
 
                     // Call React.createElement(tag, ...
@@ -6932,8 +6932,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitJsxElement(node: JsxElement | JsxSelfClosingElement) {
                 switch (compilerOptions.jsx) {
-                    case JsxEmit.React:
-                        jsxEmitReact(node);
+                    case JsxEmit.Generic:
+                        jsxEmitGeneric(node);
                         break;
                     case JsxEmit.Preserve:
                     // Fall back to preserve if None was specified (we'll error earlier)
@@ -6991,7 +6991,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function getTextToEmit(node: JsxText) {
                 switch (compilerOptions.jsx) {
-                    case JsxEmit.React:
+                    case JsxEmit.Generic:
                         let text = trimReactWhitespaceAndApplyEntities(node);
                         if (text === undefined || text.length === 0) {
                             return undefined;
@@ -7007,7 +7007,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
-                    case JsxEmit.React:
+                    case JsxEmit.Generic:
                         write("\"");
                         write(trimReactWhitespaceAndApplyEntities(node));
                         write("\"");
@@ -7029,7 +7029,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emit(node.expression);
                             write("}");
                             break;
-                        case JsxEmit.React:
+                        case JsxEmit.Generic:
                             emit(node.expression);
                             break;
                     }

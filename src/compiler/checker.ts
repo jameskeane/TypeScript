@@ -141,6 +141,7 @@ namespace ts {
         let globalTemplateStringsArrayType: ObjectType;
         let globalESSymbolType: ObjectType;
         let jsxElementType: ObjectType;
+        let jsxImplementorType: ObjectType;
         /** Lazily loaded, use getJsxIntrinsicElementType() */
         let jsxIntrinsicElementsType: ObjectType;
         let globalIterableType: GenericType;
@@ -206,7 +207,8 @@ namespace ts {
             IntrinsicElements: "IntrinsicElements",
             ElementClass: "ElementClass",
             ElementAttributesPropertyNameContainer: "ElementAttributesProperty",
-            Element: "Element"
+            Element: "Element",
+            Implementor: "Implementor"
         };
 
         let subtypeRelation: Map<RelationComparisonResult> = {};
@@ -7530,7 +7532,7 @@ namespace ts {
         }
 
         /**
-         * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
+         * Returns true iff JSX should emit this tag name as a string rather than an identifier or qualified name
          */
         function isJsxIntrinsicIdentifier(tagName: Identifier|QualifiedName) {
             if (tagName.kind === SyntaxKind.QualifiedName) {
@@ -7858,6 +7860,10 @@ namespace ts {
                 error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
+            if (jsxImplementorType === undefined) {
+                error(errorNode, Diagnostics.JSX_requires_an_Implementor_when_translating);
+            }
+
             if (jsxElementType === undefined) {
                 if (compilerOptions.noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
@@ -7869,14 +7875,8 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // If we're compiling under --jsx react, the symbol 'React' should
-            // be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no 'React' symbol in scope, we should issue an error.
-            if (compilerOptions.jsx === JsxEmit.React) {
-                let reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
-                if (reactSym) {
-                    getSymbolLinks(reactSym).referenced = true;
-                }
+            if (jsxImplementorType !== undefined) {
+                node.implementor = jsxImplementorType.symbol.name;
             }
 
             let targetAttributesType = getJsxElementAttributesType(node);
@@ -14888,6 +14888,7 @@ namespace ts {
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
             jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
+            jsxImplementorType = getExportedTypeFromNamespace("JSX", JsxNames.Implementor);
             getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));

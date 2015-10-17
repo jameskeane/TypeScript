@@ -47,11 +47,11 @@ namespace ts {
             name: "jsx",
             type: {
                 "preserve": JsxEmit.Preserve,
-                "react": JsxEmit.React
+                "generic": JsxEmit.Generic
             },
             paramType: Diagnostics.KIND,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
-            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_generic,
+            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_generic
         },
         {
             name: "listFiles",
